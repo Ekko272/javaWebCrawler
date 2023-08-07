@@ -8,6 +8,7 @@ class SecondProjectApplicationTests {
 
     @Test
     void contextLoads() {
+        System.out.println("okk");
     }
 
 }

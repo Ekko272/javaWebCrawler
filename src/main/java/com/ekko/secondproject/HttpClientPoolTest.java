@@ -1,5 +1,6 @@
 package com.ekko.secondproject;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -29,6 +30,15 @@ public class HttpClientPoolTest {
     private static void doGet(PoolingHttpClientConnectionManager cm) throws IOException {
         CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(cm).build();
         HttpGet httpGet = new HttpGet("https://www.deanza.edu/clubs/club-list.html");
+
+        //配置请求信息
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(1000) //创建连接的最长时间
+                .setConnectionRequestTimeout(500) //获取连接的最长时间
+                .setSocketTimeout(10*1000) //数据传输的最长时间
+                .build();
+
+        //设置请求信息
+        httpGet.setConfig(requestConfig);
 
         //发请求，获取response
         CloseableHttpResponse response = null;
