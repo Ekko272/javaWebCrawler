@@ -77,26 +77,19 @@ class SecondProjectApplicationTests {
         //All club-car-description class div(Club Description)
         Elements clubDescriptions = doc.getElementsByClass("club-card-description");
         Elements contactsSmartWay = doc.getElementsByClass("club-card-contacts");
-        Elements contacts = doc.getElementsByClass("far fa-envelope mr-1 fa-fw");
-        Elements contactNames = doc.getElementsByTag("strong");
-        Elements contactPhones = doc.getElementsByClass("far fa-phone mr-1 fa-fw");
 
         for(int i=0 ; i<clubNames.size();i++){
             String nameText = clubNames.get(i).text();
-            System.out.println("Name of the club: " + nameText);
             String descriptionText = clubDescriptions.get(i).text();
-            System.out.println("Description: " + descriptionText);
-//            String clubEmail = contacts.get(i).nextElementSibling().text();
-//            System.out.println("Club Email: " + clubEmail);
-//            String contactName = contactNames.get(i).text();
-//            System.out.println("Contact Name: " + contactName);
-//            String contactPhone = contactPhones.get(i).text();
-            List<String> textList = new ArrayList<>();
 
-            //1. club email
-            //2. contact phone
-            //3. contact name
-            //4. contact email
+            Club club = new Club();
+            club.setName(nameText);
+            club.setDescription(descriptionText);
+            club.setActivityDate("");
+            club.setLinks(null);
+
+
+            List<String> textList = new ArrayList<>();
             Elements allElements = contactsSmartWay.get(i).getAllElements();
             for (Element element : allElements) {
                 String text = element.ownText().trim();
@@ -104,53 +97,36 @@ class SecondProjectApplicationTests {
                     textList.add(text);
                 }
             }
+            club.setClubEmail(textList.get(1));
 
-            //private String name;
-            //    private String phoneNumber;
-            //    private String email;
 
-            for (int j = 1; j < textList.size();j++) {
-                System.out.println("Extracted Text: " + textList.get(j));
-                //Club club = new Club();
-                //club.setClubEmail(textList.get(j));
-                //System.out.println("这个是不是name： " + textList.get(j+2));
-                //Contact contact = new Contact(textList.get(j+2))
+            int index = (textList.size() - 2) / 3;
+            for(int j = 0; j < index ;++j){
+                Contact contact = new Contact();
+                contact.setPhoneNumber(textList.get(j*3 + 2));
+                contact.setName(textList.get(j*3 + 3));
+                contact.setEmail(textList.get(j*3 + 4));
+                club.addContact(contact);
             }
+
+            String clubstring = club.toString();
+            System.out.println("Club information: " + clubstring);
+            clubList.add(club);
+
         }
 
-//
-//        Element nameElement = doc.selectFirst(".club-contact strong");
-//            String contactName = nameElement.text();
-//            System.out.println(contactName);
-//            Element phoneElement = doc.selectFirst(".club-contact .far.fa-phone");
-//            String phoneNumber = phoneElement.nextSibling().toString().trim();
-//            System.out.println("phoneNumber: " + phoneNumber);
+        Elements aElements = doc.select(".club-card-links a");
+        List<Link> links = new ArrayList<>();
+        for (Element aElement : aElements) {
+            String linkText = aElement.text();
+            String linkHref = aElement.attr("href");
+            links.add(new Link(linkText,linkHref));
+            System.out.println("Link Text: " + linkText);
+            System.out.println("Link Href: " + linkHref);
+            System.out.println(); // Add an empty line for separation
+        }
 
 
-
-
-
-
-
-            Element secondEmailElement = doc.select(".club-contact a[href^=mailto]").last();
-            String secondEmailAddress = secondEmailElement.text();
-            System.out.println(secondEmailAddress);
-            Elements aElements = doc.select(".club-card-links a");
-            List<Link> links = new ArrayList<>();
-            for (Element aElement : aElements) {
-                String linkText = aElement.text();
-                String linkHref = aElement.attr("href");
-                links.add(new Link(linkText,linkHref));
-                System.out.println("Link Text: " + linkText);
-                System.out.println("Link Href: " + linkHref);
-                System.out.println(); // Add an empty line for separation
-            }
-            //clubList1.add(new Club(nameText,descriptionText,emailAddress,links,"",new Contact(contactName,phoneNumber,secondEmailAddress)))
-//
-
-        Elements emailElement = doc.select("a[href^=mailto]");
-        String emailAddress = emailElement.text();
-        System.out.println(emailAddress);
 
     }
 
