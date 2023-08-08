@@ -4,70 +4,13 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-@SpringBootTest
-class SecondProjectApplicationTests {
-
-    @Test
-    void contextLoads() {
-        String html = "<div class=\"club-card-contacts\">\n" +
-                "    <h4 class=\"mb-0\">Contact Info</h4>\n" +
-                "    <hr class=\"hr-grey mb-4\" />\n" +
-                "    <p>\n" +
-                "        <span class=\"far fa-envelope mr-1 fa-fw\"></span>\n" +
-                "        <a href=\"mailto:deanza3dprinting@gmail.com\">deanza3dprinting@gmail.com</a>\n" +
-                "    </p>\n" +
-                "    <p class=\"mb-3 pl-2 club-contact\" style=\"border-left:5px solid #E5E5E5\">\n" +
-                "        <strong>Max Gilleland</strong>\n" +
-                "        <br />\n" +
-                "        <span class=\"far fa-phone mr-1 fa-fw\"></span>\n" +
-                "        (408) 864-5578\n" +
-                "        <br />\n" +
-                "        <span class=\"far fa-envelope mr-1 fa-fw\"></span>\n" +
-                "        <a href=\"mailto:gillelandmax@fhda.edu\">gillelandmax@fhda.edu</a>\n" +
-                "        <br />\n" +
-                "    </p>\n" +
-                "</div>";
-
-        Document doc = Jsoup.parse(html);
-
-        Element divElement = doc.selectFirst("div.club-card-contacts");
-        if (divElement != null) {
-            List<String> textList = new ArrayList<>();
-
-            Elements allElements = divElement.getAllElements();
-            for (Element element : allElements) {
-                String text = element.ownText().trim();
-                if (!text.isEmpty()) {
-                    textList.add(text);
-                }
-            }
-
-
-            for (String text : textList) {
-                System.out.println("Extracted Text: " + text);
-            }
-        } else {
-            System.out.println("No matching <div> element found.");
-        }
-    }
-
-    @Test
-    void testUrl() throws Exception{
-        Document doc = Jsoup.parse(new URL("https://www.deanza.edu/clubs/club-list.html"), 1000);
-        //使用标签选择器，获取title标签中的内容
-        String title = doc.getElementsByTag("title").first().text();
-        System.out.println(title);
-    }
-
-    @Test
-    void testDom() throws Exception{
+public class MainController {
+    void crawler() throws Exception{
         Document doc = Jsoup.parse(new URL("https://www.deanza.edu/clubs/club-list.html"), 1000);
         List<Club> clubList = new ArrayList<>();
 
@@ -124,5 +67,4 @@ class SecondProjectApplicationTests {
         }
 
     }
-
 }
